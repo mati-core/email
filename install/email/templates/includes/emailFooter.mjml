@@ -1,0 +1,25 @@
+<mj-section css-class="container" padding="0">
+	<mj-column padding="0">
+		<mj-raw>
+			<mj-spacer height="25px" />
+		</mj-raw>
+	</mj-column>
+</mj-section>
+
+<mj-section background-color="#f7f7f7" css-class="container" padding="15px 5px">
+	<mj-column width="280px" css-class="col_footer" padding="0">
+		<mj-text><b>Kontaktní informace</b></mj-text>
+		<mj-text>Internetový obchod</mj-text>
+		<mj-text><a href="{$projectUrl}">{$projectUrl}</a></mj-text>
+	</mj-column>
+
+	<mj-column width="280px" css-class="col_footer" padding="0">
+		<mj-text><b>{$projectName}.</b></mj-text>
+		<mj-text>
+			Telefon: {$projectPhone}
+		</mj-text>
+		<mj-text>
+			E-mail: {$projectEmail}
+		</mj-text>
+	</mj-column>
+</mj-section>

@@ -1,0 +1,44 @@
+{
+	"name": "mati-core/email",
+	"license": "MIT",
+	"description": "Emailer for MatiCore",
+	"homepage": "https://github.com/mati-core/email",
+	"authors": [
+		{
+			"name": "Martin Olmr",
+			"homepage": "https://martinolmr.cz"
+		},
+		{
+			"name": "Jan Barášek",
+			"homepage": "https://baraja.cz"
+		}
+	],
+	"require": {
+		"php": ">=8.0",
+		"nette/utils": "^3.0",
+		"nette/di": "^3.0",
+		"nette/finder": "^3.0",
+		"baraja-core/doctrine": "~2.0",
+		"baraja-core/package-manager": "~2.0"
+	},
+	"require-dev": {
+		"nette/tester": "~2.0",
+		"tracy/tracy": "^2.3",
+		"phpstan/phpstan": "^0.12",
+		"phpstan/phpstan-nette": "^0.12.6",
+		"mati-core/constant": "dev-master",
+		"mati-core/utils": "dev-master"
+	},
+	"autoload": {
+		"classmap": [
+			"src/"
+		]
+	},
+	"minimum-stability": "stable",
+	"scripts": {
+		"phpstan": [
+			"vendor/bin/phpstan analyse src -c phpstan.neon --level 6 --no-progress"
+		],
+		"tester": "tester tests -s"
+	}
+}

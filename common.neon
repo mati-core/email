@@ -1,0 +1,46 @@
+parameters:
+	emailer:
+		defaultMailOptions:
+			from: info@martinolmr.cz
+			fromName: MatiCore - sandbox
+			bcc: []
+		useQueue: false
+	mail:
+		smtp: true
+		host: smtp.email.cz
+		port: 465
+		username: no-reply@martinolmr.cz
+		password: "YourBest@Password"
+		secure: ssl
+	mjml:
+		applicationID: null #MJML Application ID
+		publicKey: null #MJML Public key
+		secretKey: null #MJML Secret key
+	constant:
+		default:
+			email:
+				baseUrl: https://martinolmr.cz
+				projectName: MatiCore - sandbox
+				phone: '+420 111 222 333'
+				from: info@martinolmr.cz
+
+services:
+	mail.mailer: MatiCore\Email\Emailer(
+		%rootDir%/email,
+		%emailer.useQueue%
+	)
+	emailerAccessor: MatiCore\Email\EmailerAccessor
+	emailer.queueProcess: MatiCore\Email\QueueProcess
+	emailer.sender: MatiCore\Email\Sender(%mail%)
+	emailer.senderAccessor: MatiCore\Email\SenderAccessor
+	emailer.logger: MatiCore\Email\EmailerLogger
+	emailer.serializer: MatiCore\Email\MessageToDatabaseSerializer(%emailer.defaultMailOptions%, %rootDir%/data)
+	emailer.daemon: MatiCore\Email\Command\EmailerDaemon
+	latteRenderer:
+		factory: MatiCore\Email\LatteRenderer(%tempDir%)
+		autowired: MatiCore\Email\LatteRenderer
+	mjmlRenderer:
+		factory: MatiCore\Email\Mjml\MjmlRenderer(%tempDir%)
+		autowired: MatiCore\Email\Mjml\MjmlRenderer
+	mjmlClient: MatiCore\Email\Mjml\ApiClient(%mjml.applicationID%, %mjml.secretKey%)
+	- MatiCore\Email\Mjml\ApiClientAccessor
