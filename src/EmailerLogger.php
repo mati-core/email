@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace MatiCore\Email;
 
 
-use MatiCore\Database\EntityManager;
-use MatiCore\Database\EntityManagerException;
+use Baraja\Doctrine\EntityManager;
+use Baraja\Doctrine\EntityManagerException;
 use MatiCore\Email\Entity\Log;
 use Tracy\Debugger;
 
+/**
+ * Class EmailerLogger
+ * @package MatiCore\Email
+ */
 class EmailerLogger
 {
 
