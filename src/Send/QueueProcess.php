@@ -135,6 +135,7 @@ class QueueProcess
 						OR email.sendEarliestAt <= :now
 					)
 					')
+					// @phpstan-ignore-next-line
 					->setParameters([
 						'statusInQueue' => Email::STATUS_IN_QUEUE,
 						'statusWaitingForNextAttempt' => Email::STATUS_WAITING_FOR_NEXT_ATTEMPT,
@@ -178,7 +179,7 @@ class QueueProcess
 				Debugger::log($e);
 				$template = $email->getTemplate();
 
-				$this->logger->log('ERROR', 'E-mail #' . $email->id . ' failed to send: ' . $e->getMessage() . ', details on Tracy logger.');
+				$this->logger->log('ERROR', 'E-mail #' . $email->getId() . ' failed to send: ' . $e->getMessage() . ', details on Tracy logger.');
 
 				if ($template !== null && $email->getFailedAttemptsCount() > $template->getMaxAllowedAttempts()) {
 					$email->setStatus(Email::STATUS_PREPARING_ERROR);
