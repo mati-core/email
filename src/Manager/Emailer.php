@@ -209,7 +209,7 @@ class Emailer implements IEmailer
 
 		if ($finalTemplate === null) {
 			EmailException::missingTemplate($typeName, $this->dataDir);
-		}else{
+		} else {
 			$message->setHtmlBody(
 				$this->renderTemplate($finalTemplate, $parameters)
 			);
@@ -413,6 +413,24 @@ class Emailer implements IEmailer
 				->getQuery()
 				->getSingleResult()
 			);
+	}
+
+	/**
+	 * @param string $from
+	 * @param string $to
+	 * @param string $subject
+	 * @param string $text
+	 * @throws ConstantException
+	 * @throws EmailException
+	 */
+	public function sendEmail(string $from, string $to, string $subject, string $text): void
+	{
+		$this->getEmailServiceByType(TextEmail::class, [
+			'from' => $from,
+			'to' => $to,
+			'subject' => $subject,
+			'text' => $text,
+		])->send();
 	}
 
 }

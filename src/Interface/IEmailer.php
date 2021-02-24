@@ -18,10 +18,9 @@ interface IEmailer extends Mailer
 
 	/**
 	 * @param NetteMessage $message
-	 * @param string $templateSlug
 	 * @param string $sendEarliestAt
 	 * @return Email|null
 	 */
-	public function insertMessageToQueue(NetteMessage $message, string $templateSlug, string $sendEarliestAt = 'now'): ?Email;
+	public function insertMessageToQueue(NetteMessage $message, string $sendEarliestAt = 'now'): ?Email;
 
 }
