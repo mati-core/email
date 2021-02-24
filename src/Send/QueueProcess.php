@@ -6,6 +6,7 @@ namespace MatiCore\Email;
 
 
 use Baraja\Doctrine\EntityManager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Nette\Mail\SmtpException;
 use Nette\SmartObject;
@@ -135,12 +136,11 @@ class QueueProcess
 						OR email.sendEarliestAt <= :now
 					)
 					')
-					// @phpstan-ignore-next-line
-					->setParameters([
+					->setParameters(new ArrayCollection([
 						'statusInQueue' => Email::STATUS_IN_QUEUE,
 						'statusWaitingForNextAttempt' => Email::STATUS_WAITING_FOR_NEXT_ATTEMPT,
-						'now' => DateTime::from('now'),
-					])
+						'now' => DateTime::from('now')->format('Y-m-d H:i:s'),
+					]))
 					->orderBy('raw.priority', 'ASC')
 					->setMaxResults(1)
 			))->getIterator();
