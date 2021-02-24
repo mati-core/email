@@ -6,7 +6,6 @@ namespace MatiCore\Email;
 
 
 use Baraja\Doctrine\EntityManager;
-use Baraja\Doctrine\EntityManagerException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Nette\Mail\SmtpException;
 use Nette\SmartObject;

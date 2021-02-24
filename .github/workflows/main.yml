@@ -23,5 +23,5 @@ jobs:
       - name: The PHP Security Checker
         uses: symfonycorp/security-checker-action@v2
 
-      #- name: Check PHPStan rules
-      #  run: composer phpstan
+      - name: Check PHPStan rules
+        run: composer phpstan

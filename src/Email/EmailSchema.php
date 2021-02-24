@@ -28,7 +28,7 @@ class EmailSchema
 	private array $systemParameters = [];
 
 	/**
-	 * @var array<string>
+	 * @var array<string|null>
 	 */
 	private array $userParameters = [
 		'from' => null,
@@ -84,7 +84,7 @@ class EmailSchema
 	}
 
 	/**
-	 * @return array<string>
+	 * @return array<?string>
 	 */
 	public function getUserParameters(): array
 	{

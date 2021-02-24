@@ -17,7 +17,7 @@ class Message extends NetteMessage
 {
 
 	/**
-	 * @var array<string>
+	 * @var array(array<string>)
 	 */
 	protected array $attachmentsPaths = [];
 

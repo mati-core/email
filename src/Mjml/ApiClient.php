@@ -149,10 +149,7 @@ class ApiClient
 		if ($statusCode !== 200) {
 			throw new \Exception(
 				$response['message'],
-				$statusCode,
-				null,
-				$response['requestId'] ?? null,
-				isset($response['startedAt']) ? DateTime::from($response['startedAt']) : null
+				$statusCode
 			);
 		}
 

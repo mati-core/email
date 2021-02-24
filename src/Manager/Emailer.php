@@ -281,21 +281,20 @@ class Emailer implements IEmailer
 	}
 
 	/**
-	 * @param NetteMessage $message
-	 * @param string|null $template
+	 * @param NetteMessage $mail
 	 * @throws EmailException
 	 */
-	public function send(NetteMessage $message): void
+	public function send(NetteMessage $mail): void
 	{
 		if ($this->useQueue === true) {
 			try {
-				$this->insertMessageToQueue($message);
+				$this->insertMessageToQueue($mail);
 			} catch (EntityManagerException $e) {
 				Debugger::log($e);
 				throw new EmailException($e->getMessage(), $e->getCode(), $e);
 			}
 		} else {
-			$this->sendNow($message);
+			$this->sendNow($mail);
 		}
 	}
 
@@ -328,7 +327,7 @@ class Emailer implements IEmailer
 				: Email::STATUS_IN_QUEUE
 		);
 
-		if ($sendEarliestAt && $sendEarliestAt !== 'now') {
+		if (!$message instanceof Message || ($sendEarliestAt && $sendEarliestAt !== 'now')) {
 			$email->setSendEarliestAt(DateTime::from($sendEarliestAt));
 		} else {
 			$email->setSendEarliestAt(DateTime::from($message->getSendEarliestAt()));

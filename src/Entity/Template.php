@@ -27,7 +27,7 @@ class Template
 	 * @var array<Email>|ArrayCollection|PersistentCollection|Collection
 	 * @ORM\OneToMany(targetEntity="Email", mappedBy="template")
 	 */
-	private array $emails;
+	private array|ArrayCollection|PersistentCollection|Collection $emails;
 
 	/**
 	 * @var string

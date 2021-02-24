@@ -31,7 +31,8 @@ class MessageToDatabaseSerializer
 	private string $dataDir;
 
 	/**
-	 * @param array(array<string>) $config
+	 * MessageToDatabaseSerializer constructor.
+	 * @param array<string> $config
 	 * @param string $dataDir
 	 */
 	public function __construct(array $config, string $dataDir)
