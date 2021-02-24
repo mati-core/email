@@ -26,7 +26,7 @@ parameters:
 
 services:
 	mail.mailer: MatiCore\Email\Emailer(
-		%rootDir%/email,
+		%appDir%/email,
 		%emailer.useQueue%
 	)
 	emailerAccessor: MatiCore\Email\EmailerAccessor
