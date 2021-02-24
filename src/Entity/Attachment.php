@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace MatiCore\Email;
 
 
-use JetBrains\PhpStorm\Pure;
-
 /**
  * Class Attachment
  * @package MatiCore\Email

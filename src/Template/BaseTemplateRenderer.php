@@ -8,7 +8,7 @@ namespace MatiCore\Email;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\InvalidLinkException;
 use Nette\DI\Container;
-use Nette\Localization\ITranslator;
+use Nette\Localization\Translator;
 use Nette\Utils\Strings;
 use MatiCore\Utils\Http;
 
@@ -30,7 +30,7 @@ abstract class BaseTemplateRenderer implements TemplateRenderer
 	private $linkGenerator;
 
 	/**
-	 * @var ITranslator
+	 * @var Translator
 	 */
 	private $translator;
 
@@ -41,7 +41,7 @@ abstract class BaseTemplateRenderer implements TemplateRenderer
 	{
 		$this->container = $container;
 		$this->linkGenerator = $container->getByType(LinkGenerator::class);
-		//$this->translator = $container->getByType(ITranslator::class);
+		$this->translator = $container->getByType(Translator::class);
 	}
 
 	/**
@@ -53,7 +53,7 @@ abstract class BaseTemplateRenderer implements TemplateRenderer
 			'basePath' => Http::getBaseUrl(),
 			'baseUrl' => Http::getBaseUrl(),
 			'linkGenerator' => $this->linkGenerator,
-			//'translator' => $this->translator,
+			'translator' => $this->translator,
 		];
 	}
 

@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace MatiCore\Email;
 
 /**
- * Trait InjectEmailer
+ * Trait InjectEmailEngine
  * @package MatiCore\Email
  */
-trait InjectEmailer
+trait InjectEmailEngine
 {
 
 	/**
-	 * @var Emailer
+	 * @var EmailerAccessor
 	 * @inject
 	 */
-	public $emailer;
+	public $emailEngine;
 
 }

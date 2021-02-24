@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MatiCore\Email;
 
 
-use Nette\Mail\IMailer;
+use Nette\Mail\Mailer;
 use Nette\Mail\Message as NetteMessage;
 use Nette\Mail\SendmailMailer;
 use Nette\Mail\SmtpMailer;
@@ -37,7 +37,7 @@ class Sender
 	];
 
 	/**
-	 * @var IMailer
+	 * @var Mailer
 	 */
 	private $mailer;
 

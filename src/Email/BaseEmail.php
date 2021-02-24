@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MatiCore\Email\Email;
 
 
-use MatiCore\Core\Constant\ConstantManagerAccessor;
-use MatiCore\Core\Constant\Exception\ConstantException;
+use MatiCore\Constant\ConstantManagerAccessor;
+use MatiCore\Constant\Exception\ConstantException;
 use MatiCore\Email\EmailerAccessor;
 use MatiCore\Email\EmailException;
 use MatiCore\Email\Message;
