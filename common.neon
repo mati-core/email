@@ -44,3 +44,4 @@ services:
 		autowired: MatiCore\Email\Mjml\MjmlRenderer
 	mjmlClient: MatiCore\Email\Mjml\ApiClient(%mjml.applicationID%, %mjml.secretKey%)
 	- MatiCore\Email\Mjml\ApiClientAccessor
+	- MatiCore\Email\TextMail

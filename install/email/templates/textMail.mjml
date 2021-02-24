@@ -1,0 +1,15 @@
+<mjml>
+  <mj-head>
+    <mj-include path="includes/emailHead.mjml" />
+    <mj-title>{$subject}</mj-title>
+  </mj-head>
+  <mj-body background-color="#fff">
+    <mj-section>
+      <mj-column width="600px" background-color="#fff" css-class="container">
+        <mj-text>{$text}</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-include path="includes/emailRegards.mjml" />
+    <mj-include path="includes/emailFooter.mjml" />
+  </mj-body>
+</mjml>
