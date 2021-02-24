@@ -10,7 +10,7 @@ use MatiCore\Email\Email\BaseEmail;
  * Class TextMail
  * @package MatiCore\Email
  */
-class TextMail extends BaseEmail
+class TextEmail extends BaseEmail
 {
 
 }
