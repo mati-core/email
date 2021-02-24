@@ -24,6 +24,10 @@ parameters:
 				phone: '+420 111 222 333'
 				from: info@martinolmr.cz
 
+orm.annotations:
+	paths:
+		MatiCore\User: %appDir%/../vendor/mati-core/email/src/Entity
+
 services:
 	mail.mailer: MatiCore\Email\Emailer(
 		%appDir%/email,
@@ -44,4 +48,4 @@ services:
 		autowired: MatiCore\Email\Mjml\MjmlRenderer
 	mjmlClient: MatiCore\Email\Mjml\ApiClient(%mjml.applicationID%, %mjml.secretKey%)
 	- MatiCore\Email\Mjml\ApiClientAccessor
-	- MatiCore\Email\TextMail
+	- MatiCore\Email\TextEmail

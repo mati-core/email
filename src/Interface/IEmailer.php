@@ -9,6 +9,10 @@ use Nette\Mail\Mailer;
 use Nette\Mail\Message as NetteMessage;
 use MatiCore\Email\Entity\Email;
 
+/**
+ * Interface IEmailer
+ * @package MatiCore\Email
+ */
 interface IEmailer extends Mailer
 {
 

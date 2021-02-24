@@ -24,7 +24,6 @@ use Nette\Utils\Validators;
 use MatiCore\Constant\ConstantManagerAccessor;
 use MatiCore\Email\Email\Email as EmailService;
 use MatiCore\Email\Entity\Email;
-use MatiCore\Email\Entity\Template as MailTemplate;
 use Tracy\Debugger;
 
 /**
@@ -35,8 +34,6 @@ class Emailer implements IEmailer
 {
 
 	use SmartObject;
-
-	protected const TEMPLATE_MAIL_MESSAGE = 'mail-message';
 
 	/**
 	 * @var Container
@@ -288,32 +285,28 @@ class Emailer implements IEmailer
 	 * @param string|null $template
 	 * @throws EmailException
 	 */
-	public function send(NetteMessage $message, ?string $template = null): void
+	public function send(NetteMessage $message): void
 	{
 		if ($this->useQueue === true) {
 			try {
-				$this->insertMessageToQueue($message, $template ?? self::TEMPLATE_MAIL_MESSAGE);
+				$this->insertMessageToQueue($message);
 			} catch (EntityManagerException $e) {
 				Debugger::log($e);
 				throw new EmailException($e->getMessage(), $e->getCode(), $e);
 			}
 		} else {
-			$this->sendNow($message, $template);
+			$this->sendNow($message);
 		}
 	}
 
 	/**
 	 * @param NetteMessage $message
-	 * @param string $templateSlug
 	 * @param string $sendEarliestAt
 	 * @return Email|null
 	 * @throws EmailException
-	 * @throws EntityManagerException
 	 */
-	public function insertMessageToQueue(NetteMessage $message, string $templateSlug, string $sendEarliestAt = 'now'): ?Email
+	public function insertMessageToQueue(NetteMessage $message, string $sendEarliestAt = 'now'): ?Email
 	{
-		$template = $this->getMailTemplate($templateSlug);
-
 		if (trim($message->getBody()) === '' && trim($message->getHtmlBody()) === '') {
 			$this->logger->log('WARNING', __METHOD__ . ': Empty mail (no body)');
 
@@ -326,7 +319,7 @@ class Emailer implements IEmailer
 
 		$raw = $this->serializer->messageToRaw($message);
 		$this->entityManager->persist($raw);
-		$email = new Email($raw, $template);
+		$email = new Email($raw);
 		$raw->setEmail($email);
 
 		$email->setStatus(
@@ -354,41 +347,6 @@ class Emailer implements IEmailer
 	}
 
 	/**
-	 * @param string $slug
-	 * @return MailTemplate
-	 * @throws EmailException
-	 */
-	private function getMailTemplate(string $slug): MailTemplate
-	{
-		if (isset($this->templates[$slug]) === false) {
-			throw new EmailException('Unknown template "' . $slug . '"');
-		}
-
-		static $cache = [];
-
-		if (isset($cache[$slug]) === false) {
-			try {
-				$cache[$slug] = $this->entityManager->getRepository(MailTemplate::class)
-					->createQueryBuilder('template')
-					->where('template.slug = :slug')
-					->setParameter('slug', $slug)
-					->getQuery()
-					->getSingleResult();
-			} catch (NoResultException|NonUniqueResultException $e) {
-				$mailTemplate = new MailTemplate($slug, $this->templates[$slug], 5);
-				try {
-					$this->entityManager->persist($mailTemplate)->flush($mailTemplate);
-					$cache[$slug] = $mailTemplate;
-				} catch (EntityManagerException $e) {
-					throw new EmailException($e->getMessage());
-				}
-			}
-		}
-
-		return $cache[$slug];
-	}
-
-	/**
 	 * @param Email $email
 	 * @param Message $message
 	 * @throws EmailException
@@ -410,13 +368,12 @@ class Emailer implements IEmailer
 
 	/**
 	 * @param NetteMessage $message
-	 * @param string|null $template
 	 * @throws EmailException
 	 */
-	public function sendNow(NetteMessage $message, ?string $template = null): void
+	public function sendNow(NetteMessage $message): void
 	{
 		try {
-			$email = $this->insertMessageToQueue($message, $template ?? self::TEMPLATE_MAIL_MESSAGE);
+			$email = $this->insertMessageToQueue($message);
 
 			try {
 				if ($email !== null && $email->getStatus() !== Email::STATUS_SENT) {
@@ -447,15 +404,15 @@ class Emailer implements IEmailer
 		static $cache = [];
 
 		return $cache[$id] ?? ($cache[$id] = $this->entityManager->getRepository(Email::class)
-			->createQueryBuilder('email')
-			->select('email, template, raw')
-			->leftJoin('email.template', 'template')
-			->leftJoin('email.raw', 'raw')
-			->where('email.id = :id')
-			->setParameter('id', $id)
-			->getQuery()
-			->getSingleResult()
-		);
+				->createQueryBuilder('email')
+				->select('email, template, raw')
+				->leftJoin('email.template', 'template')
+				->leftJoin('email.raw', 'raw')
+				->where('email.id = :id')
+				->setParameter('id', $id)
+				->getQuery()
+				->getSingleResult()
+			);
 	}
 
 }
