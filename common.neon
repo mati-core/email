@@ -26,7 +26,7 @@ parameters:
 
 orm.annotations:
 	paths:
-		MatiCore\User: %appDir%/../vendor/mati-core/email/src/Entity
+		MatiCore\Email: %appDir%/../vendor/mati-core/email/src/Entity
 
 services:
 	mail.mailer: MatiCore\Email\Emailer(
