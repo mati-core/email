@@ -77,9 +77,9 @@ class Emailer implements IEmailer
 	private MessageToDatabaseSerializer $serializer;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public string $language;
+	public string|null $language;
 
 	/**
 	 * Emailer constructor.
