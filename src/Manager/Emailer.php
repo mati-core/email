@@ -77,9 +77,9 @@ class Emailer implements IEmailer
 	private MessageToDatabaseSerializer $serializer;
 
 	/**
-	 * @var string|null
+	 * @var string
 	 */
-	public string|null $language;
+	public string $language = '';
 
 	/**
 	 * Emailer constructor.
@@ -117,7 +117,7 @@ class Emailer implements IEmailer
 		if ($translator instanceof \Contributte\Translation\Translator) {
 			$this->language = $translator->getLocale();
 
-			if ($this->language === null || $this->language === '') {
+			if ($this->language === '') {
 				$this->language = $translator->getDefaultLocale();
 			}
 		} else {
