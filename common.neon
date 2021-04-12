@@ -1,7 +1,7 @@
 parameters:
 	emailer:
 		defaultMailOptions:
-			from: info@martinolmr.cz
+			from: info@app-universe.cz
 			fromName: MatiCore - sandbox
 			bcc: []
 		useQueue: false
@@ -9,7 +9,7 @@ parameters:
 		smtp: true
 		host: smtp.email.cz
 		port: 465
-		username: no-reply@martinolmr.cz
+		username: no-reply@app-universe.cz
 		password: "YourBest@Password"
 		secure: ssl
 	mjml:
@@ -22,7 +22,7 @@ parameters:
 				baseUrl: https://martinolmr.cz
 				projectName: MatiCore - sandbox
 				phone: '+420 111 222 333'
-				from: info@martinolmr.cz
+				from: info@app-universe.cz
 
 orm.annotations:
 	paths:
@@ -38,7 +38,7 @@ services:
 	emailer.sender: MatiCore\Email\Sender(%mail%)
 	emailer.senderAccessor: MatiCore\Email\SenderAccessor
 	emailer.logger: MatiCore\Email\EmailerLogger
-	emailer.serializer: MatiCore\Email\MessageToDatabaseSerializer(%emailer.defaultMailOptions%, %rootDir%/data)
+	emailer.serializer: MatiCore\Email\MessageToDatabaseSerializer(%emailer.defaultMailOptions%, %appDir%/email/temp)
 	emailer.daemon: MatiCore\Email\Command\EmailerDaemon
 	latteRenderer:
 		factory: MatiCore\Email\LatteRenderer(%tempDir%)

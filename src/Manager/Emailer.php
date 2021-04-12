@@ -14,6 +14,7 @@ use MatiCore\Email\Mjml\MjmlRenderer;
 use Nette\DI\Container;
 use Nette\DI\MissingServiceException;
 use Nette\FileNotFoundException;
+use Nette\Localization\Translator;
 use Nette\Mail\Message as NetteMessage;
 use Nette\SmartObject;
 use Nette\Utils\DateTime;
@@ -76,6 +77,11 @@ class Emailer implements IEmailer
 	private MessageToDatabaseSerializer $serializer;
 
 	/**
+	 * @var string
+	 */
+	public string $language;
+
+	/**
 	 * Emailer constructor.
 	 * @param string $dataDir
 	 * @param bool $useQueue
@@ -85,6 +91,7 @@ class Emailer implements IEmailer
 	 * @param SenderAccessor $sender
 	 * @param EmailerLogger $logger
 	 * @param MessageToDatabaseSerializer $messageToDatabaseSerializer
+	 * @param Translator $translator
 	 */
 	public function __construct(
 		string $dataDir,
@@ -94,7 +101,8 @@ class Emailer implements IEmailer
 		ConstantManagerAccessor $constantManager,
 		SenderAccessor $sender,
 		EmailerLogger $logger,
-		MessageToDatabaseSerializer $messageToDatabaseSerializer
+		MessageToDatabaseSerializer $messageToDatabaseSerializer,
+		Translator $translator
 	)
 	{
 		$this->container = $container;
@@ -105,6 +113,16 @@ class Emailer implements IEmailer
 		$this->useQueue = $useQueue;
 		$this->logger = $logger;
 		$this->serializer = $messageToDatabaseSerializer;
+
+		if ($translator instanceof \Contributte\Translation\Translator) {
+			$this->language = $translator->getLocale();
+
+			if ($this->language === null || $this->language === '') {
+				$this->language = $translator->getDefaultLocale();
+			}
+		} else {
+			$this->language = 'cs';
+		}
 	}
 
 	/**
@@ -183,26 +201,27 @@ class Emailer implements IEmailer
 			$message->setSendEarliestAt($parameters['sendEarliestAt']);
 		}
 
-		$finalTemplate = null;
-		$currentLanguage = 'cs'; //TranslatorManager::getLocale();
+		$finalTemplate = $email->getTemplate($this->language);
 
-		foreach (Finder::find($typeName . '.*')->in($this->dataDir . '/templates') as $path => $info) {
-			preg_match('/\/(?<name>\w+)(?:\.(?<language>\w+))?\.(?<format>\w+)$/', str_replace('\\', '/', $path), $pathParser);
+		if ($finalTemplate === null) {
+			foreach (Finder::find($typeName . '.*')->in($this->dataDir . '/templates') as $path => $info) {
+				preg_match('/\/(?<name>\w+)(?:\.(?<language>\w+))?\.(?<format>\w+)$/', str_replace('\\', '/', $path), $pathParser);
 
-			if (isset($pathParser['language'])) {
-				$templateLanguage = $pathParser['language'] ?: null;
-			} else {
-				$templateLanguage = null;
-			}
-
-			if ($pathParser['name'] === $typeName) {
-				if ($templateLanguage === $currentLanguage) {
-					$finalTemplate = $path;
-					break;
+				if (isset($pathParser['language'])) {
+					$templateLanguage = $pathParser['language'] ?: null;
+				} else {
+					$templateLanguage = null;
 				}
 
-				if ($finalTemplate === null && $templateLanguage === null) {
-					$finalTemplate = $path;
+				if ($pathParser['name'] === $typeName) {
+					if ($templateLanguage === $this->language) {
+						$finalTemplate = $path;
+						break;
+					}
+
+					if ($finalTemplate === null && $templateLanguage === null) {
+						$finalTemplate = $path;
+					}
 				}
 			}
 		}

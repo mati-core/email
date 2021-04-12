@@ -19,6 +19,11 @@ abstract class BaseEmail implements Email
 {
 
 	/**
+	 * @var array<string>|null
+	 */
+	protected array|null $templateConfig;
+
+	/**
 	 * @var EmailerAccessor
 	 */
 	protected EmailerAccessor $emailEngine;
@@ -30,11 +35,13 @@ abstract class BaseEmail implements Email
 
 	/**
 	 * BaseEmail constructor.
+	 * @param array|null $templateConfig
 	 * @param EmailerAccessor $emailEngine
-	 * @param ConstantManagerAccessor $constant
+	 * @param ConstantManagerAccessor $constant )
 	 */
-	public function __construct(EmailerAccessor $emailEngine, ConstantManagerAccessor $constant)
+	public function __construct(?array $templateConfig = null, EmailerAccessor $emailEngine, ConstantManagerAccessor $constant)
 	{
+		$this->templateConfig = $templateConfig;
 		$this->emailEngine = $emailEngine;
 		$this->constant = $constant;
 	}
@@ -72,6 +79,33 @@ abstract class BaseEmail implements Email
 		]);
 
 		return $schema;
+	}
+
+	/**
+	 * @param string|null $lang
+	 * @return string|null
+	 * @throws EmailException
+	 */
+	public function getTemplate(?string $lang): ?string
+	{
+		$template = null;
+		if ($this->templateConfig !== null) {
+			if ($lang !== null && isset($this->templateConfig[$lang])) {
+				$template = $this->templateConfig[$lang];
+			} elseif (isset($this->templateConfig['default'])) {
+				$template = $this->templateConfig['default'];
+			}
+		}
+
+		if ($template !== null) {
+			if (is_file($template)) {
+				return $template;
+			} else {
+				throw new EmailException('Missing email template: ' . $template);
+			}
+		}
+
+		return null;
 	}
 
 	/**
