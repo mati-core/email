@@ -39,7 +39,7 @@ class EmailerLogger
 		$log = new Log($level, $message);
 
 		try {
-			$this->entityManager->persist($log)->flush($log);
+			$this->entityManager->persist($log)->getUnitOfWork()->commit($log);
 		} catch (EntityManagerException $e) {
 			Debugger::log($e);
 		}

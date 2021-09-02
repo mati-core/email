@@ -173,7 +173,7 @@ class QueueProcess
 					$email->incrementFailedAttemptsCount();
 				}
 
-				$this->entityManager->flush($email);
+				$this->entityManager->getUnitOfWork()->commit($email);
 			} catch (\Throwable $e) {
 				echo 'E';
 				Debugger::log($e);
@@ -191,7 +191,7 @@ class QueueProcess
 					$email->incrementFailedAttemptsCount();
 				}
 
-				$this->entityManager->flush($email);
+				$this->entityManager->getUnitOfWork()->commit($email);
 			}
 
 			usleep((int) ($this->emailDelay * 1000 * 1000));
@@ -219,7 +219,7 @@ class QueueProcess
 		if (trim($message->getHtmlBody()) === '' && trim($message->getBody()) === '') {
 			$email->setStatus(Email::STATUS_PREPARING_ERROR);
 			$email->addNote(Date::getDateTimeIso() . ' - E-mail was not sent (empty body)');
-			$this->entityManager->flush($email);
+			$this->entityManager->getUnitOfWork()->commit($email);
 
 			return;
 		}
@@ -233,7 +233,7 @@ class QueueProcess
 		$email->setPreparingDuration($builderDuration);
 		$email->setSendingDuration($mailerDuration);
 		$email->setDatetimeSent(DateTime::from('now'));
-		$this->entityManager->flush($email);
+		$this->entityManager->getUnitOfWork()->commit($email);
 
 		$this->logger->log(
 			'INFO',

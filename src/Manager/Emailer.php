@@ -358,7 +358,7 @@ class Emailer implements IEmailer
 		if ($message instanceof Message && $message->getAttachmentPaths()) {
 			$this->setAttachmentsToMessage($email, $message);
 			$email->setStatus(Email::STATUS_IN_QUEUE);
-			$this->entityManager->flush($email);
+			$this->entityManager->getUnitOfWork()->commit($email);
 		}
 
 		return $email;
@@ -401,7 +401,7 @@ class Emailer implements IEmailer
 					$email->setStatus(Email::STATUS_SENT);
 					$email->setDatetimeSent(DateTime::from('now'));
 
-					$this->entityManager->flush($email);
+					$this->entityManager->getUnitOfWork()->commit($email);
 				}
 			} catch (\Throwable $e) {
 				Debugger::log($e);
